@@ -8,9 +8,10 @@ spring:
     password: postgres
 
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
       dialect: org.hibernate.dialect.PostgresSQLDialect
     properties:
-      hibernate:
-        show-sql: true
+      hibernate.format_sql: true
+
