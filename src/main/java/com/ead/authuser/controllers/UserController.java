@@ -8,6 +8,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -52,6 +53,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "userId") UUID userId,
+                                             @Validated(UserDTO.UserView.UserPut.class)
                                              @JsonView(UserDTO.UserView.UserPut.class) @RequestBody UserDTO userDTO){
         Optional<UserModel> userModelOptional = userService.getUserById(userId);
         if(userModelOptional.isEmpty()){
@@ -69,6 +71,7 @@ public class UserController {
 
     @PutMapping("/{userId}/password")
     public ResponseEntity<Object> updatePassword(@PathVariable(value = "userId") UUID userId,
+                                             @Validated(UserDTO.UserView.PasswordPut.class)
                                              @JsonView(UserDTO.UserView.PasswordPut.class) @RequestBody UserDTO userDTO){
         Optional<UserModel> userModelOptional = userService.getUserById(userId);
         if(userModelOptional.isEmpty()){
@@ -86,6 +89,7 @@ public class UserController {
 
     @PutMapping("/{userId}/image")
     public ResponseEntity<Object> updateImage(@PathVariable(value = "userId") UUID userId,
+                                                 @Validated(UserDTO.UserView.ImagePut.class)
                                                  @JsonView(UserDTO.UserView.ImagePut.class) @RequestBody UserDTO userDTO){
         Optional<UserModel> userModelOptional = userService.getUserById(userId);
         if(userModelOptional.isEmpty()){

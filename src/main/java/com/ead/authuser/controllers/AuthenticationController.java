@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class AuthenticationController {
     UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> createUser(@RequestBody
+    public ResponseEntity<Object> createUser(@RequestBody @Validated(UserDTO.UserView.RegistrationPost.class)
                                                  @JsonView(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO){
         var userExists = userService.existsByUserName(userDTO.getUsername());
         if(userExists){
