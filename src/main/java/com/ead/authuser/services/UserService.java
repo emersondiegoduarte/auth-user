@@ -3,6 +3,7 @@ package com.ead.authuser.services;
 import com.ead.authuser.model.UserModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,5 +26,5 @@ public interface UserService {
 
     UserModel updateUser(UserModel userModel);
 
-    Page<UserModel> findAll(Pageable pageable);
+    Page<UserModel> findAll(Specification<UserModel> specification, Pageable pageable);
 }

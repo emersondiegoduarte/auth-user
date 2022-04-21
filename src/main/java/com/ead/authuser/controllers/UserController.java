@@ -3,6 +3,7 @@ package com.ead.authuser.controllers;
 import com.ead.authuser.dto.UserDTO;
 import com.ead.authuser.model.UserModel;
 import com.ead.authuser.services.UserService;
+import com.ead.authuser.specifications.SpecificationTemplate;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/users")
@@ -30,8 +34,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<Page<UserModel>> getAllUsers(@PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
-        Page<UserModel> page = userService.findAll(pageable);
+    public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec spec,
+            @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<UserModel> page = userService.findAll(spec,pageable);
+        if(!page.isEmpty()){
+            page.getContent().forEach((userModel -> {
+                 userModel.add(linkTo(methodOn(UserController.class).getUserById(userModel.getUserId())).withSelfRel());
+            }));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
